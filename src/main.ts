@@ -20,11 +20,19 @@ Vue.config.errorHandler = async (error: Error /*, vm, info*/) => {
 Vue.config.warnHandler = (msg: string /*, vm, trace*/) => {
     console.error(msg); /* eslint-disable-line no-console */
 };
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
-let instance = null;
+interface QiankunProps {
+    container: HTMLElement
+    // eslint-disable-next-line no-unused-vars
+    onGlobalStateChange: (callback: (state: Record<string, unknown>) => void) => void
+    // eslint-disable-next-line no-unused-vars
+    setGlobalState: (state: Record<string, unknown>) => void
+    platform: 'phone' | 'ipad' | 'spc' | 'pc'
+    lang: 'zh-cn' | 'zh-tw' | 'en'
+}
 
-const render = (props?: { container: HTMLElement }) => {
+let instance: Vue | null = null;
+
+const render = (props?: QiankunProps) => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     //@ts-ignore
     if (!instance) {
@@ -56,7 +64,17 @@ export async function bootstrap(): Promise<void> {
 }
 
 // eslint-disable-next-line no-unused-vars
-export async function mount(props: { container: HTMLElement, name: string, onGlobalStateChange: (callback: (state: Record<string, unknown>) => void) => void, setGlobalState: (state: Record<string, unknown>) => void }): Promise<void> {
+export async function mount(props: QiankunProps): Promise<void> {
+    if (!props.platform) {
+        return Tips.error('screen type is required.');
+    }
+    store.dispatch('setScreenType', props.platform);
+
+    if (!props.lang) {
+        return Tips.error('language type is required.');
+    }
+    store.dispatch('setLanguage', props.lang);
+
     props.onGlobalStateChange((state: Record<string, unknown>) => {
         // eslint-disable-next-line no-console
         console.log('module b 监听全局通信变化', state);
@@ -65,6 +83,7 @@ export async function mount(props: { container: HTMLElement, name: string, onGlo
         store.dispatch('setLanguage', lang);
         store.dispatch('setScreenType', platform);
     });
+
     render(props);
 }
 
@@ -75,8 +94,4 @@ export async function unmount(): Promise<void> {
     instance = null;
     // eslint-disable-next-line no-console
     console.log('module b 卸载');
-}
-
-export async function update(): Promise<void> {
-    //
 }
