@@ -18,6 +18,7 @@ module.exports = merge(common, {
     output: {
         filename: 'javascript/[hash:20][id].js',
         publicPath: './'
+        // publicPath可根据vuerouter路由层级写成相对路径
         // publicPath: './module/moduleb/'
         // filename: 'javascript/[name].js'
     },
