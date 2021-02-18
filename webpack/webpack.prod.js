@@ -17,7 +17,8 @@ module.exports = merge(common, {
     stats: 'errors-only',
     output: {
         filename: 'javascript/[hash:20][id].js',
-        publicPath: '/module/moduleb/'
+        publicPath: './'
+        // publicPath: './module/moduleb/'
         // filename: 'javascript/[name].js'
     },
     optimization: {
@@ -77,7 +78,7 @@ module.exports = merge(common, {
                 options: {
                     esModule: false,
                     outputPath: 'image',
-                    publicPath: '../image',
+                    publicPath: '../module/moduleb/image',
                     name: '[hash:20].[ext]'
                 }
             }]

@@ -5,16 +5,16 @@ Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [{
     path: '/',
-    redirect: '/moduleb',
+    redirect: '/moduleb-router',
     component: () => import(/* webpackChunkName: 'layout' */ '../views/layout/index.vue'),
     children: [{
-        path: '/moduleb',
+        path: '/moduleb-router',
         component: () => import(/* webpackChunkName: 'home' */ '../views/home.vue')
     }]
 }];
 
 const route = new VueRouter({
-    ...process?.env?.NODE_ENV === 'development' ? {} : { base: '/myconsole/' },
+    ...process?.env?.NODE_ENV === 'development' ? {} : { base: '' },
     mode: process?.env?.NODE_ENV === 'development' ? 'hash' : 'history',
     routes
 });
